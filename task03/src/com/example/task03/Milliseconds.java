@@ -8,7 +8,10 @@ public class Milliseconds implements TimeUnit {
     private final long amount;
 
     public Milliseconds(long amount) {
-        this.amount = amount;
+
+        if (amount < 0) {
+            throw new IllegalArgumentException("Not an appropriate time value");
+        }this.amount = amount;
     }
 
     @Override
@@ -18,11 +21,14 @@ public class Milliseconds implements TimeUnit {
 
     @Override
     public long toSeconds() {
-        return amount / 1000;
+        return Math.round(amount / 1000d);
     }
 
     @Override
     public long toMinutes() {
-        return amount / 1000 * 60;
+        return Math.round(amount / (1000d * 60d));
     }
+
+    @Override
+    public long toHours(){return Math.round(amount / (1000d*60d*60d));}
 }
