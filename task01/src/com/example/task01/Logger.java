@@ -24,13 +24,12 @@ public class Logger {
     }
 
     public static Logger getLogger(String name) {
-        return loggers.computeIfAbsent(name, Logger::new);
+        return loggers.computeIfAbsent(name, k -> new Logger(k));
     }
 
     private Logger(String name) {
         if (!loggers.containsKey(name)) {
             this.name = name;
-            loggers.put(name, this);
         }
     }
 
