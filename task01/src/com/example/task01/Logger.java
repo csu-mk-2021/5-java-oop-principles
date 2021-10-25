@@ -1,19 +1,20 @@
 package com.example.task01;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Logger {//push again
-    public enum Level {
+public class Logger {
+    enum Level {
         DEBUG,
         INFO,
         WARNING,
         ERROR
     }
-    private String name;
+
     private Level level;
+    private String name;
     private static final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<>();
 
     public String getName() {
@@ -21,64 +22,77 @@ public class Logger {//push again
     }
 
     public Logger(String name){
-        this.name = name;
-        loggers.put(name, this);
+        this(name, Level.INFO);
     }
 
-    public static Logger getLogger(String name){
-        return loggers.computeIfAbsent(name, Logger::new);
+    public Logger(String name, Level level) {
+        this.level = level;
+        if (!loggers.containsKey(name)) {
+            this.name = name;
+            loggers.put(name, this);
+        }
     }
+
+    public static Logger getLogger(String name){//тот метод мне всё сломал
+        if (!loggers.containsKey(name)) {
+            Logger logger = new Logger (name);
+            loggers.put(name, logger);
+            return logger;
+        }
+        else {
+            return loggers.get(name);
+        }
+
+    }
+
+    private void log(Level level, String message) {
+        log(level, message, (Object) null);
+    }
+
+    private void log(Level level, String fMessage, Object... args) {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        if (this.level.ordinal() <= level.ordinal()) {
+            System.out.println("[" + level + "] " + date.format(new Date()) + " " + this.name + " - " + String.format(fMessage, args));
+        }
+    }
+
+    public void debug(String message) {
+        log(Level.DEBUG, message, (Object) null);
+    }
+
+    public void debug(String fMessage, Object... args) {
+        log(Level.DEBUG, fMessage, args);
+    }
+
+    public void info(String message) {
+        log(Level.INFO, message, (Object) null);
+    }
+
+    public void info(String fMessage, Object... args) {
+        log(Level.INFO, fMessage, args);
+    }
+
+    public void warning(String message) {
+        log(Level.WARNING, message, (Object) null);
+    }
+
+    public void warning(String fMessage, Object... args) {
+        log(Level.WARNING, fMessage, args);
+    }
+
+    public void error(String message) {
+        log(Level.ERROR, message, (Object) null);
+    }
+
+    public void error(String fMessage, Object... args) {
+        log(Level.ERROR, fMessage, args);
+    }
+
     public void setLevel(Level level) {
         this.level = level;
     }
 
     public Level getLevel() {
         return level;
-    }
-
-    public void debug(String message) {
-        log(Level.DEBUG, message);
-    }
-
-    public void debug(String messageFormat, Object... messageArgs) {
-        log(Level.DEBUG, messageFormat, messageArgs);
-    }
-
-    public void info(String message) {
-        log(Level.INFO, message);
-    }
-
-    public void info(String messageFormat, Object... messageArgs) {
-        log(Level.INFO, messageFormat, messageArgs);
-    }
-
-    public void warning(String message) {
-        log(Level.WARNING, message);
-    }
-
-    public void warning(String messageFormat, Object... messageArgs) {
-        log(Level.WARNING, messageFormat, messageArgs);
-    }
-
-    public void error(String message) {
-        log(Level.ERROR, message);
-    }
-
-    public void error(String messageFormat, Object... messageArgs) {
-        log(Level.ERROR, messageFormat, messageArgs);
-    }
-
-    public void log(Level level, String message) {
-        if (this.level != null && level.compareTo(this.level) < 0) {
-            return;
-        }
-
-        Date now = new Date();
-        String dateTime = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(now);
-        System.out.printf("[%s] %s %s - %s%n", level, dateTime, name, message);
-    }
-
-    public void log(Level level, String messageFormat, Object... messageArgs) {
-        log(level, String.format(messageFormat, messageArgs));
     }
 }
