@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Logger {
+public class Logger {//push again
     public enum Level {
         DEBUG,
         INFO,
