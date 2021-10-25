@@ -7,7 +7,6 @@ public interface TimeUnit {
 
     /**
      * Возвращает продолжительность текущего интервала, пересчитанного в миллисекундах.
-     *
      * @return количество миллисекунд в текущем интервале
      */
     long toMillis();
@@ -27,5 +26,7 @@ public interface TimeUnit {
      * @return количество минут в текущем интервале
      */
     long toMinutes();
+
+    long toHour();
 
 }
