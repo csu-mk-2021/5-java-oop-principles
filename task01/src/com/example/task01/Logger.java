@@ -3,9 +3,10 @@ package com.example.task01;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Logger {
-    enum Level {
+    public enum Level {
         DEBUG,
         INFO,
         WARNING,
@@ -13,7 +14,7 @@ public class Logger {
     }
     private String name;
     private Level level;
-    private static final HashMap<String, Logger> loggers = new HashMap<>();
+    private static final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<>();
 
     public String getName() {
         return name;
@@ -24,17 +25,8 @@ public class Logger {
         loggers.put(name, this);
     }
 
-    public Logger(){
-    }
-
     public static Logger getLogger(String name){
-        Logger logger = loggers.get(name);
-        if (logger == null){
-            return new Logger(name);
-        }
-        else {
-            return logger;
-        }
+        return loggers.computeIfAbsent(name, Logger::new);
     }
     public void setLevel(Level level) {
         this.level = level;
