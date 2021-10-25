@@ -1,9 +1,11 @@
 package com.example.task03;
 
+import java.sql.SQLOutput;
+
 public class Task03Main {
     public static void main(String[] args) {
-        TimeUnit unit1 = new Seconds(1000);
-        printTimeUnit(unit1);
+        TimeUnit unit1 = new Milliseconds(2000);
+        System.out.println(unit1.toSeconds());;
     }
 
     private static void printTimeUnit(TimeUnit unit) {
