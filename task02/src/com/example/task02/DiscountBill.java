@@ -6,19 +6,23 @@ import java.util.List;
 public class DiscountBill extends Bill {
 
     private double discount;
-    private Bill bill;
 
-    public DiscountBill(Bill bill, double discount){
-        this.discount = discount;
-        this.bill = bill;
+    public DiscountBill(double discount){
+        /**
+         * @param discount скидка в процентах, принимает значение от 0 до 100
+         */
+        if (discount >= 0 && discount <=100) {
+            this.discount = discount;
+        }
     }
 
     public long getPriceDiscount() {
-        return (long)(this.bill.getPrice()*this.discount/100);
+        return (long)(super.getPrice()*this.discount/100);
     }
 
-    public long getSumDiscounted() {
-        return (long)(this.bill.getPrice() - getPriceDiscount());
+    @Override
+    public long getPrice() {
+        return (long)(super.getPrice() - getPriceDiscount());
     }
 
     public double getPercentDiscount() {
