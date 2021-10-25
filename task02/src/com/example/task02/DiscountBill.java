@@ -9,10 +9,6 @@ public class DiscountBill extends Bill{
     }
 
     public long getDiscountPrice() {
-        if(discount>=1f)
-        {
-            throw new IllegalArgumentException("discount to big");
-        }
         return (long) (getPrice() * (1f - discount));
     }
 
