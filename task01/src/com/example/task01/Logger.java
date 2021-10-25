@@ -3,8 +3,8 @@ package com.example.task01;
 import java.util.*;
 
 public class Logger {
-    public static final int INFO = 0;
-    public static final int DEBUG = 1;
+    public static final int DEBUG = 0;
+    public static final int INFO = 1;
     public static final int WARNING = 2;
     public static final int ERROR = 3;
     private static final Map<String, Logger> hashLogger = new HashMap<>();
@@ -23,7 +23,7 @@ public class Logger {
 
     public int getLevel() {
         return current_level;
-    }
+    } 
 
     private void printMessage(String level, String message) {
         System.out.printf("[%s] %04d.%02d.%02d %02d:%02d:%02d %s - %s%n",
@@ -108,12 +108,7 @@ public class Logger {
     }
 
     public static Logger getLogger(String name) {
-        Logger logger = hashLogger.get(name);
-        if (logger != null)
-            return hashLogger.get(name);
-        logger = new Logger(name);
-        hashLogger.put(name, logger);
-        return logger;
+        return hashLogger.computeIfAbsent(name, Logger::new);
     }
 
 
