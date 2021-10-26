@@ -2,6 +2,7 @@ package com.example.task04;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MemoryHandler implements MessageHandler{
 
@@ -10,6 +11,7 @@ public class MemoryHandler implements MessageHandler{
     private final MessageHandler handler;
 
     public MemoryHandler(long capacity, MessageHandler handler){
+        Objects.requireNonNull(handler);
         this.capacity = capacity;
         this.handler = handler;
     }

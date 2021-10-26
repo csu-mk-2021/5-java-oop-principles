@@ -2,6 +2,7 @@ package com.example.task04;
 
 import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.ConcurrentHashMap;
 
 enum Level {
     DEBUG,
@@ -16,7 +17,7 @@ public class Logger {
     private Level level;
     private String name;
 
-    private static HashMap<String, Logger> loggers = new HashMap<String, Logger>();
+    private static ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
 
     private static List<MessageHandler> handlers = new ArrayList<>();
 
@@ -25,16 +26,12 @@ public class Logger {
     }
 
     public static Logger getLogger(String name) {
-        if (loggers.containsKey(name)) {
-            return loggers.get(name);
-        } else
-            throw new NullPointerException();
+        return loggers.computeIfAbsent(name, k -> new Logger(k));
     }
 
     public Logger(String name) {
         if (!loggers.containsKey(name)) {
             this.name = name;
-            loggers.put(name, this);
         }
     }
 
@@ -46,10 +43,12 @@ public class Logger {
     }
 
     private void log(Level level, String message) {
+        Objects.requireNonNull(level);
         log(level, message, null);
     }
 
     private void log(Level level, String fMessage, Object... args) {
+        Objects.requireNonNull(level);
         SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         if (this.level.ordinal() <= level.ordinal()) {
             String msg = String.format("[%s] %s %s - %s", level, date.format(new Date()), this.name, String.format(fMessage, args));
@@ -92,6 +91,7 @@ public class Logger {
     }
 
     public void setLevel(Level level) {
+        Objects.requireNonNull(level);
         this.level = level;
     }
 
